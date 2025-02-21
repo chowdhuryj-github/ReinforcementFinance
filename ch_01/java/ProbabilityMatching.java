@@ -8,7 +8,7 @@ import java.util.Random;
  */
 public class ProbabilityMatching {
 
-            // initializing a random object
+    // initializing a random object
     public static Random random = new Random();
 
     // the state space is discrete and describes the possible outcomes
@@ -42,7 +42,7 @@ public class ProbabilityMatching {
         
     }
 
-        /**
+    /**
      * the epoch method for betting vs tossing
      * @return the total reward
      */
