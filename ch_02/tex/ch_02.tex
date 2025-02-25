@@ -1,0 +1,54 @@
+\documentclass[a4paper]{article}
+
+\setlength{\columnsep}{40pt}
+\usepackage{graphicx} 
+\usepackage[a4paper,margin=0.5in]{geometry}
+\usepackage{booktabs}
+\usepackage{tabularx}
+
+\title{Deep-Q Learning}
+\author{Salvin Chowdhury} 
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{Decision Problems}
+In finance, \textit{optimization} and associated techniques play a central role. Finance is nothing but the systemic
+application of optimization techniques to problems of a financial context. Here are the different optimization
+problems:
+
+\begin{itemize}
+    \item \textit{Discrete vs Continuous Action Space:} the quantites or action to be chosen through optimization
+    can be from a set of finite, discrete options (\textit{optimal choice}) or from a set of inifnite, continuous 
+    options (\textit{optimal control})
+    \item \textit{Static vs Dynamic Problems:} static problems are one-off optimization problems, dynamic problems 
+    are characterized by a typically large number of sequential and connected optimization problems
+    \item \textit{Finite vs Infinite Horizon:} dynamic optimization problems have a finite or infinite horizon. 
+    Playing a game of chess has a finite horizon. Climate policy is a descision problem with infinite hoirzons.
+    \item \textit{Discrete vs Continuous Time:} some dynamic problems only require discrete decisions and
+    optimizations at different points in time, such as chess. Other dynamic problems require continuous decisions 
+    and optimizations. For example, driving a car.
+\end{itemize}
+
+\section{Q-Learning}
+QL is based on an agent interacting with the environment and learning from the ensuing experiences through rewards 
+and penalties. A QL agent takes actions based on two principles:
+\begin{itemize}
+    \item \textit{Exploitation:} refers to the actions taken by the QL agent under the current optimal policy QL
+    \item \textit{Exploration:} refers to actions taken by a Ql agent that are random. The purpose is to explore
+    random actions and their associated values beyond what the current optimal policy would dictate
+\end{itemize}
+A QL agent usually follows a $\epsilon$-greedy strategy, where $\epsilon$ is defined as the ratio with which the 
+agent relies on exploration as compared to exploitation. During training, it is assumed that the $\epsilon$ decreases
+with a increasing number of training units.
+
+\subsection{Deep Q-Learning}
+In DQL, the policy Q is regularly updated through \textit{replay}. For replay, the agent stores passed experiences 
+such as (state, actions, rewards and next states and etc.) and use small batches from the memorized experiences 
+to retrain the DNN. 
+
+
+
+\end{document}
