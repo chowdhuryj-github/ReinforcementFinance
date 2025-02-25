@@ -14,7 +14,7 @@ from numpy.random import default_rng
 rng = default_rng(seed=100)
 
 # defining the state space
-state_space = [1, 1, 1, 1, 0]
+state_space = [1, 1, 1, 0, 0]
 
 # defining the epoch function
 def epoch(n):
