@@ -26,3 +26,9 @@ print("Move Cart Left: ", env.step(0))
 
 # moving the environment taking a step using a action
 print("Move Car Right: ", env.step(1))
+
+
+"""
+env.step(n) returns new state, reward, terminated, truncated and additional data
+the game is played until True is returned for "terminated", for every step, agent receives a reward of 1
+"""
