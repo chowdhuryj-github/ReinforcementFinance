@@ -16,6 +16,8 @@ import numpy as np
 import tensorflow as tf
 import gymnasium as gym
 from tensorflow import keras
+from keras.layers import Dense
+from keras.models import Sequential
 from collections import deque
 
 
@@ -84,3 +86,102 @@ class DQLAgent:
         self.model.add(Dense(24, activation='relu'))
         self.model.add(Dense(2, activation='linear'))
         self.model.compile(loss='mse', optimizer=optimizer)
+
+
+class DQLAgent(DQLAgent):
+    
+    def act(self, state):
+        if random.random() < self.epsilon:
+
+            # choosing a random action
+            return self.env.action_space.sample()
+        
+        # choosing a action according to the current optimal policy
+        return np.argmax(self.model.predict(state)[0])
+    
+    def replay(self):
+
+        # random chooses a batch of past experiences for replay
+        batch = random.sample(self.memory, self.batch_size)
+        for state, action, next_state, reward, done in batch:
+            if not done:
+                reward += self.gamma * np.amax(
+
+                    # combines the immediate and discounted future reward
+                    self.model.predict(next_state)[0])
+            
+            # generates the values for state-action pairs
+            target = self.model.predict(state)
+
+            # updates the values for the state-action pairs
+            target[0, action] = reward
+
+            # trains / updates the DNN to account for the updated value
+            self.model.fit(state, target, epochs=2, verbose=False)
+        if self.epsilon > self.epsilon_min:
+
+            # reduces the epsilon by the epsilon_decay factor
+            self.epsilon *= self.epsilon_decay
+
+
+class DQLAgent(DQLAgent):
+
+    def learn(self, episodes):
+        for e in range(1, episodes + 1):
+
+            # the environment is reset
+            state, _ = self.env.reset()
+
+            # the state object is reshaped
+            state = np.reshape(state, [1, 4])
+            for f in range(1, 5000):
+
+                # action is chosen according to the .act() method
+                action = self.act(state)
+
+                # relevant data points are collected for replay
+                next_state, reward, done, trunc, _ = self.env.step(action)
+
+                # state object is rehsaped
+                next_state = np.reshape(next_state, [1, 4])
+
+                # relevant data points are collected
+                self.memory.append([state, action, next_state, reward, done])
+
+                # state variable is updated to the current state
+                state = next_state
+                if done or trunc:
+
+                    # once terminated, total reward is collected
+                    self.trewards.append(f)
+
+                    # maximum total reward is updated if necessary
+                    self.max_treward = max(self.max_treward, f)
+                    templ = f'episode={e:4d} | treward={f:4d}'
+                    templ += f' | max={self.max_treward:4d}'
+                    print(templ, end="\r")
+                    break
+            if len(self.memory) > self.batch_size:
+
+                # replay is initiated as soon as there are enough experienes
+                self.replay()
+        print()
+
+
+class DQLAgent(DQLAgent):
+    def test(self, episodes):
+        for e in range(1, episodes + 1):
+            state, _ = self.env.reset()
+            state = np.reshape(state, [1, 4])
+            for f in range(1, 5001):
+
+                # only actions according to the optimal policy are chosen
+                action = np.argmax(self.model.predict(state)[0])
+                state, reward, done, trunc, _ = self.env.step(action)
+                state = np.reshape(state, [1, 4])
+                if done or trunc:
+                    print(f, end='')
+                    break
+
+
+
